@@ -1,6 +1,6 @@
 name := "validator"
 organization := "com.stuartizon"
-version := "1.1.0"
+version := "1.1.1-SNAPSHOT"
 scalaVersion := "2.11.11"
 
 libraryDependencies ++= Seq(
