@@ -1,4 +1,4 @@
-package com.ovoenergy.validator
+package com.stuartizon.validator
 
 import scala.reflect.macros.blackbox
 

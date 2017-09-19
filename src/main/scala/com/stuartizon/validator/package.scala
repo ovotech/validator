@@ -1,4 +1,4 @@
-package com.ovoenergy
+package com.stuartizon
 
 import scalaz.ValidationNel
 
