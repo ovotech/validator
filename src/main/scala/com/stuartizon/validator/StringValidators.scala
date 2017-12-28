@@ -1,32 +1,33 @@
 package com.stuartizon.validator
 
+import cats.data.Validated._
+
 import scala.util.matching.Regex
-import scalaz.Scalaz._
 
 trait StringValidators {
-  val notEmptyValidator = new Validator[String] {
+  val notEmptyValidator: Validator[String] = new Validator[String] {
     override def validate(id: String, string: String): ValidationResult[String] = string match {
-      case value if value.isEmpty => ErrorDescription(id, "Must be non empty").failureNel
-      case _ => string.successNel
+      case value if value.isEmpty => invalidNel(ErrorDescription(id, "Must be non empty"))
+      case _ => valid(string)
     }
   }
 
-  def regexValidator(regex: Regex, errorMessage: String) = new Validator[String] {
+  def regexValidator(regex: Regex, errorMessage: String): Validator[String] = new Validator[String] {
     override def validate(id: String, string: String): ValidationResult[String] = string match {
-      case regex(_*) => string.successNel
-      case _ => ErrorDescription(id, errorMessage).failureNel
+      case regex(_*) => valid(string)
+      case _ => invalidNel(ErrorDescription(id, errorMessage))
     }
   }
 
-  val numericValidator = regexValidator( """^([0-9]+)$""".r, "Must be a number")
+  val numericValidator: Validator[String] = regexValidator( """^([0-9]+)$""".r, "Must be a number")
 
-  val emailValidator = regexValidator( """^([^@\.]+?(\.[^@\.]+?)*?@[^@`.]+?(\.[^@\.]+?)+?)$""".r, "Must be a valid email address")
+  val emailValidator: Validator[String] = regexValidator( """^([^@\.]+?(\.[^@\.]+?)*?@[^@`.]+?(\.[^@\.]+?)+?)$""".r, "Must be a valid email address")
 
-  val ukPhoneNumberValidator= regexValidator( """^(\(?44\)? ?|\(?\+\(?44\)? ?|\(?0)(\d\)? ?){9,10}$""".r, "Must be a valid UK phone number")
+  val ukPhoneNumberValidator: Validator[String] = regexValidator( """^(\(?44\)? ?|\(?\+\(?44\)? ?|\(?0)(\d\)? ?){9,10}$""".r, "Must be a valid UK phone number")
 
-  val accountNumberValidator= regexValidator("""^(\d{8})$""".r, "Must be 8 digits")
+  val accountNumberValidator: Validator[String] = regexValidator("""^(\d{8})$""".r, "Must be 8 digits")
 
-  val sortCodeValidator = regexValidator("""^(\d{6})$""".r, "Must be 6 digits")
+  val sortCodeValidator: Validator[String] = regexValidator("""^(\d{6})$""".r, "Must be 6 digits")
 }
 
 object StringValidators extends StringValidators

@@ -1,7 +1,7 @@
 package com.stuartizon
 
-import scalaz.ValidationNel
+import cats.data.ValidatedNel
 
 package object validator {
-  type ValidationResult[X] = ValidationNel[ErrorDescription, X]
+  type ValidationResult[X] = ValidatedNel[ErrorDescription, X]
 }
