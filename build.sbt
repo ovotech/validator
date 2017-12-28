@@ -9,5 +9,4 @@ libraryDependencies ++= Seq(
   "org.scala-lang" % "scala-reflect" % scalaVersion.value,
   "org.specs2" %% "specs2-core" % "3.8.7" % Test)
 
-bintrayOrganization := Some("ovotech")
 licenses += ("MIT", url("https://opensource.org/licenses/MIT"))
