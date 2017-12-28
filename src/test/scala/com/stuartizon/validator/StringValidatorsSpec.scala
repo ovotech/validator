@@ -1,8 +1,7 @@
 package com.stuartizon.validator
 
+import cats.data.NonEmptyList
 import org.specs2.mutable.Specification
-
-import scalaz._
 
 class StringValidatorsSpec extends Specification with StringValidators with ValidationMatchers {
   "Not empty validator" should {
@@ -13,7 +12,7 @@ class StringValidatorsSpec extends Specification with StringValidators with Vali
 
     "fail for an empty string" in {
       val name = ""
-      notEmptyValidator.validate(name) must beFailing(NonEmptyList(ErrorDescription("name", "Must be non empty")))
+      notEmptyValidator.validate(name) must beFailing(NonEmptyList.one(ErrorDescription("name", "Must be non empty")))
     }
   }
 
@@ -25,7 +24,7 @@ class StringValidatorsSpec extends Specification with StringValidators with Vali
 
     "fail for a non-numeric string" in {
       val number = "XS6893"
-      numericValidator.validate(number) must beFailing(NonEmptyList(ErrorDescription("number", "Must be a number")))
+      numericValidator.validate(number) must beFailing(NonEmptyList.one(ErrorDescription("number", "Must be a number")))
     }
   }
 
@@ -48,32 +47,32 @@ class StringValidatorsSpec extends Specification with StringValidators with Vali
     // Technically a legal address, but we don't want to allow these
     "fail for an email address with local domain name" in {
       val email = "admin@mailserver1"
-      emailValidator.validate(email) must beFailing(NonEmptyList(ErrorDescription("email", "Must be a valid email address")))
+      emailValidator.validate(email) must beFailing(NonEmptyList.one(ErrorDescription("email", "Must be a valid email address")))
     }
 
     "fail for an email address with no @ sign" in {
       val email = "john.smith.com"
-      emailValidator.validate(email) must beFailing(NonEmptyList(ErrorDescription("email", "Must be a valid email address")))
+      emailValidator.validate(email) must beFailing(NonEmptyList.one(ErrorDescription("email", "Must be a valid email address")))
     }
 
     "fail for an email address with multiple @ signs" in {
       val email = "A@b@c@example.com"
-      emailValidator.validate(email) must beFailing(NonEmptyList(ErrorDescription("email", "Must be a valid email address")))
+      emailValidator.validate(email) must beFailing(NonEmptyList.one(ErrorDescription("email", "Must be a valid email address")))
     }
 
     "fail for an email address with a double dot before @ sign" in {
       val email = "john..smith@example.com"
-      emailValidator.validate(email) must beFailing(NonEmptyList(ErrorDescription("email", "Must be a valid email address")))
+      emailValidator.validate(email) must beFailing(NonEmptyList.one(ErrorDescription("email", "Must be a valid email address")))
     }
 
     "fail for an email address with a double dot after @ sign" in {
       val email = "john.smith@example..com"
-      emailValidator.validate(email) must beFailing(NonEmptyList(ErrorDescription("email", "Must be a valid email address")))
+      emailValidator.validate(email) must beFailing(NonEmptyList.one(ErrorDescription("email", "Must be a valid email address")))
     }
 
     "fail for an email address starting with @ sign" in {
       val email = "@example.com"
-      emailValidator.validate(email) must beFailing(NonEmptyList(ErrorDescription("email", "Must be a valid email address")))
+      emailValidator.validate(email) must beFailing(NonEmptyList.one(ErrorDescription("email", "Must be a valid email address")))
     }
   }
 
@@ -100,33 +99,33 @@ class StringValidatorsSpec extends Specification with StringValidators with Vali
 
     "fail for a blank phone number" in {
       val phone = "     "
-      ukPhoneNumberValidator.validate(phone) must beFailing(NonEmptyList(ErrorDescription("phone", "Must be a valid UK phone number")))
+      ukPhoneNumberValidator.validate(phone) must beFailing(NonEmptyList.one(ErrorDescription("phone", "Must be a valid UK phone number")))
     }
 
     "fail for a phone number containing illegal chars" in {
       val phone = "0121 987 45&!"
-      ukPhoneNumberValidator.validate(phone) must beFailing(NonEmptyList(ErrorDescription("phone", "Must be a valid UK phone number")))
+      ukPhoneNumberValidator.validate(phone) must beFailing(NonEmptyList.one(ErrorDescription("phone", "Must be a valid UK phone number")))
     }
 
     "fail for a phone number which starts with 1" in {
       val phone = "12345678901"
-      ukPhoneNumberValidator.validate(phone) must beFailing(NonEmptyList(ErrorDescription("phone", "Must be a valid UK phone number")))
+      ukPhoneNumberValidator.validate(phone) must beFailing(NonEmptyList.one(ErrorDescription("phone", "Must be a valid UK phone number")))
     }
 
     "fail for a phone number with non-UK country code" in {
       val phone = "+337876013546"
-      ukPhoneNumberValidator.validate(phone) must beFailing(NonEmptyList(ErrorDescription("phone", "Must be a valid UK phone number")))
+      ukPhoneNumberValidator.validate(phone) must beFailing(NonEmptyList.one(ErrorDescription("phone", "Must be a valid UK phone number")))
     }
 
     "fail for a phone number with both +44 and 0" in {
       val phone = "+4401234567890"
-      ukPhoneNumberValidator.validate(phone) must beFailing(NonEmptyList(ErrorDescription("phone", "Must be a valid UK phone number")))
+      ukPhoneNumberValidator.validate(phone) must beFailing(NonEmptyList.one(ErrorDescription("phone", "Must be a valid UK phone number")))
     }
 
     // Technically a legal phone number, but not a residential one
     "fail for an 8 digit phone number" in {
       val phone = "0800 1111"
-      ukPhoneNumberValidator.validate(phone) must beFailing(NonEmptyList(ErrorDescription("phone", "Must be a valid UK phone number")))
+      ukPhoneNumberValidator.validate(phone) must beFailing(NonEmptyList.one(ErrorDescription("phone", "Must be a valid UK phone number")))
     }
   }
 
@@ -138,17 +137,17 @@ class StringValidatorsSpec extends Specification with StringValidators with Vali
 
     "fail for a too short account number" in {
       val account = "123456"
-      accountNumberValidator.validate(account) must beFailing(NonEmptyList(ErrorDescription("account", "Must be 8 digits")))
+      accountNumberValidator.validate(account) must beFailing(NonEmptyList.one(ErrorDescription("account", "Must be 8 digits")))
     }
 
     "fail for a too long account number" in {
       val account = "11111111111"
-      accountNumberValidator.validate(account) must beFailing(NonEmptyList(ErrorDescription("account", "Must be 8 digits")))
+      accountNumberValidator.validate(account) must beFailing(NonEmptyList.one(ErrorDescription("account", "Must be 8 digits")))
     }
 
     "fail for non numeric chars in account number" in {
       val account = "1234-5678"
-      accountNumberValidator.validate(account) must beFailing(NonEmptyList(ErrorDescription("account", "Must be 8 digits")))
+      accountNumberValidator.validate(account) must beFailing(NonEmptyList.one(ErrorDescription("account", "Must be 8 digits")))
     }
   }
 
@@ -160,17 +159,17 @@ class StringValidatorsSpec extends Specification with StringValidators with Vali
 
     "fail for a too short sort code" in {
       val sortCode = "00012"
-      sortCodeValidator.validate(sortCode) must beFailing(NonEmptyList(ErrorDescription("sortCode", "Must be 6 digits")))
+      sortCodeValidator.validate(sortCode) must beFailing(NonEmptyList.one(ErrorDescription("sortCode", "Must be 6 digits")))
     }
 
     "fail for a too long sort code" in {
       val sortCode = "1111111"
-      sortCodeValidator.validate(sortCode) must beFailing(NonEmptyList(ErrorDescription("sortCode", "Must be 6 digits")))
+      sortCodeValidator.validate(sortCode) must beFailing(NonEmptyList.one(ErrorDescription("sortCode", "Must be 6 digits")))
     }
 
     "fail for non numeric chars in sort code" in {
       val sortCode = "11-12-13"
-      sortCodeValidator.validate(sortCode) must beFailing(NonEmptyList(ErrorDescription("sortCode", "Must be 6 digits")))
+      sortCodeValidator.validate(sortCode) must beFailing(NonEmptyList.one(ErrorDescription("sortCode", "Must be 6 digits")))
     }
   }
 }
