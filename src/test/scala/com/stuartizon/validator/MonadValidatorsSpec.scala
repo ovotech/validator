@@ -24,7 +24,7 @@ class MonadValidatorsSpec extends Specification with MonadValidators with Valida
 
     "fail for a list with one invalid element" in {
       val list = List("John", "Jack", "Peter")
-      forEach[List, String](startsWithJ).validate(list) must beFailing(NonEmptyList.one(ErrorDescription("list", "Peter does not start with J")))
+      forEach[List, String](startsWithJ).validate(list) must beFailing(NonEmptyList.of(ErrorDescription("list", "Peter does not start with J")))
     }
 
     "fail for a list with multiple invalid elements" in {
@@ -44,7 +44,7 @@ class MonadValidatorsSpec extends Specification with MonadValidators with Valida
 
     "fail for an invalid optional" in {
       val name = Some("Peter")
-      forEach[Option, String](startsWithJ).validate(name) must beFailing(NonEmptyList.one(ErrorDescription("name", "Peter does not start with J")))
+      forEach[Option, String](startsWithJ).validate(name) must beFailing(NonEmptyList.of(ErrorDescription("name", "Peter does not start with J")))
     }
   }
 
@@ -61,7 +61,7 @@ class MonadValidatorsSpec extends Specification with MonadValidators with Valida
 
     "fail for an empty list" in {
       val list = Nil
-      contains[List, String](startsWithJ).validate(list) must beFailing(NonEmptyList.one(ErrorDescription("list", "Must be non empty")))
+      contains[List, String](startsWithJ).validate(list) must beFailing(NonEmptyList.of(ErrorDescription("list", "Must be non empty")))
     }
 
     "validate a present optional" in {
@@ -71,12 +71,12 @@ class MonadValidatorsSpec extends Specification with MonadValidators with Valida
 
     "fail for an invalid optional" in {
       val name = Some("Peter")
-      contains[Option, String](startsWithJ).validate(name) must beFailing(NonEmptyList.one(ErrorDescription("name", "Peter does not start with J")))
+      contains[Option, String](startsWithJ).validate(name) must beFailing(NonEmptyList.of(ErrorDescription("name", "Peter does not start with J")))
     }
 
     "fail for a missing optional" in {
       val name = None
-      contains[Option, String](startsWithJ).validate(name) must beFailing(NonEmptyList.one(ErrorDescription("name", "Must be non empty")))
+      contains[Option, String](startsWithJ).validate(name) must beFailing(NonEmptyList.of(ErrorDescription("name", "Must be non empty")))
     }
   }
 
@@ -88,12 +88,12 @@ class MonadValidatorsSpec extends Specification with MonadValidators with Valida
 
     "fail for a list missing the required element" in {
       val list = List("John", "Simon", "James")
-      contains[List, String]("Paul").validate(list) must beFailing(NonEmptyList.one(ErrorDescription("list", "Must contain Paul")))
+      contains[List, String]("Paul").validate(list) must beFailing(NonEmptyList.of(ErrorDescription("list", "Must contain Paul")))
     }
 
     "fail for an empty list" in {
       val list = Nil
-      contains[List, String]("Paul").validate(list) must beFailing(NonEmptyList.one(ErrorDescription("list", "Must contain Paul")))
+      contains[List, String]("Paul").validate(list) must beFailing(NonEmptyList.of(ErrorDescription("list", "Must contain Paul")))
     }
 
     "validate a present optional" in {
@@ -103,12 +103,12 @@ class MonadValidatorsSpec extends Specification with MonadValidators with Valida
 
     "fail for an invalid optional" in {
       val name = Some("Peter")
-      contains[Option, String]("John").validate(name) must beFailing(NonEmptyList.one(ErrorDescription("name", "Must contain John")))
+      contains[Option, String]("John").validate(name) must beFailing(NonEmptyList.of(ErrorDescription("name", "Must contain John")))
     }
 
     "fail for a missing optional" in {
       val name = None
-      contains[Option, String]("Paul").validate(name) must beFailing(NonEmptyList.one(ErrorDescription("name", "Must contain Paul")))
+      contains[Option, String]("Paul").validate(name) must beFailing(NonEmptyList.of(ErrorDescription("name", "Must contain Paul")))
     }
   }
 
@@ -120,7 +120,7 @@ class MonadValidatorsSpec extends Specification with MonadValidators with Valida
 
     "fail for an empty list" in {
       val list = Nil
-      nonEmpty[List, String].validate(list) must beFailing(NonEmptyList.one(ErrorDescription("list", "Must be non empty")))
+      nonEmpty[List, String].validate(list) must beFailing(NonEmptyList.of(ErrorDescription("list", "Must be non empty")))
     }
 
     "validate a present optional" in {
@@ -130,7 +130,7 @@ class MonadValidatorsSpec extends Specification with MonadValidators with Valida
 
     "fail for a missing optional" in {
       val name = None
-      nonEmpty[Option, String].validate(name) must beFailing(NonEmptyList.one(ErrorDescription("name", "Must be non empty")))
+      nonEmpty[Option, String].validate(name) must beFailing(NonEmptyList.of(ErrorDescription("name", "Must be non empty")))
     }
   }
 }
