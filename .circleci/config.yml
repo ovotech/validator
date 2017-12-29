@@ -24,3 +24,4 @@ workflows:
           filters:
             branches:
               only: master
+          context: org-global
