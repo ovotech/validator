@@ -1,7 +1,7 @@
 name := "validator"
 organization := "com.stuartizon"
-version := "1.3.0"
-scalaVersion := "2.11.11"
+version := "1.3.1"
+scalaVersion := "2.12.4"
 
 libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-core" % "0.9.0",
