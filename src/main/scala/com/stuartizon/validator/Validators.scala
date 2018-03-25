@@ -3,6 +3,7 @@ package com.stuartizon.validator
 trait Validators extends
   BasicValidators with
   MonadValidators with
-  StringValidators
+  StringValidators with
+  NumberValidators
 
 object Validators extends Validators
